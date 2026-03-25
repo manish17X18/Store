@@ -1,120 +1,83 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-
+import { useContext, useEffect, useState } from 'react'
+import Navbar from './components/Navbar'
+import { NavLink, Route, Routes,useSearchParams } from "react-router-dom";
+import Home from "./components/Home";
+import Cart from "./components/Cart";
+// import './App.css'
+import './index.css'
+import { AppContext } from './ContextApi/ContextApi';
+import Card from './components/Card';
+const words=["Shirts","Pants","Bags","Rings","Bracelets","Mobile",]
 function App() {
-  const [count, setCount] = useState(0)
+  const {loading,products}=useContext(AppContext)
+  //used for changing the value of placeholder of search
+  const [index,setIndex]=useState(0);
+
+  //the code comes out of setInterval when words.length is changed and it re-renders so till it is changed it is 
+  //executing setIntrval
+  useEffect(()=>{
+    const interValid=setInterval(()=>{
+      setIndex((prevIndex)=>(prevIndex+1)%words.length)
+    },2000)
+    return()=>clearInterval(interValid)
+  },[words.length])
+  
+  // for(let i=0;i<=6;i++){
+  //   if(index>5) index=0;
+  //   setIndex(index+1)
+  // }
+  
+  //useSearchPArams
+  const [searchParam,setSearchParam]=useSearchParams();
+  const item=searchParam.get('item')||"";
+  const filteredProduct=products.filter((product)=>
+    product.title.toLowerCase().includes(item.toLowerCase())
+  )
+  function changeHandler(e){
+    const val=e.target.value
+    if(val){
+      setSearchParam({item:val})
+    }
+    else{
+      setSearchParam({})
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className=' flex flex-col w-full'>
+      <div className='mb-4 flex justify-center gap-x-7 w-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-pink-300 via-fuchsia-400 to-purple-500 text-slate-900 pt-3 pb-4'>
+        <NavLink to="/" >
+          <button className='h-[100%] w-[70px] p-1 transition-all duration-300 
+          hover:bg-[radial-gradient(circle,_var(--tw-gradient-stops))] 
+        from-pink-500 via-purple-600 to-indigo-800 
+        active:text-white font-semibold rounded-lg shadow-lg '>
+            Home
+          </button>
+        </NavLink>
+        <NavLink to="/cart" className="">
+          <button className='h-[100%] w-[70px] p-1 transition-all duration-300 
+          hover:bg-[radial-gradient(circle,_var(--tw-gradient-stops))] 
+        from-pink-500 via-purple-600 to-indigo-800 
+        active:text-white font-semibold rounded-lg shadow-lg '>
+            Cart
+          </button>
+        </NavLink>
+        <div className=''>
+          <label>
+            <input type='text' placeholder={`Search ${words[index]}...`} className=' w-15% h-[80%] px-2 py-2 border-none
+            outline-none bg-white/90 backdrop-blur-sm shadow-md text-gray-700 placeholder:text-gray-400
+            focus:ring-2 focus:ring-purple-400 rounded-full transition-all duration-300' onChange={changeHandler}/>
+          </label>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      </div>
+      <div className='flex-grow'>
+        <Routes>
+          <Route path="/" element={<Home filteredProduct={filteredProduct}/>}></Route>
+          <Route path="/cart" element={<Cart/>}></Route>
+          <Route path="/item/:id" element={<Card/>}></Route>
+        </Routes>
+      </div>
+    </div>
   )
 }
 

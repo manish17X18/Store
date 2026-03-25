@@ -1,12 +1,12 @@
-const { createContext, useState, useEffect } = require("react");
+import { createContext, useState, useEffect } from 'react'
 import {toast} from 'react-hot-toast'
 
-
-export default  AppContext=createContext();
+export const  AppContext=createContext();
 
 export const AppContextProvider=({children})=>{
     const [loading,setLoading]=useState(false)//for spinning or loader 
-    const [product,setProduct]=useState([])//store all the products
+    const [products,setProduct]=useState([])//store all the products
+    const [cart,setCart]=useState([])
     async function fetchProducts() {
         try{
             setLoading(true)
@@ -28,8 +28,10 @@ export const AppContextProvider=({children})=>{
         fetchProducts,
         loading,
         setLoading,
-        product,
+        products,
         setProduct,
+        cart,
+        setCart
     }
 
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>
