@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react'
-import Navbar from './components/Navbar'
 import { NavLink, Route, Routes,useSearchParams } from "react-router-dom";
 import Home from "./components/Home";
 import Cart from "./components/Cart";
