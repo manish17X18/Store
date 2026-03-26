@@ -21,13 +21,13 @@ const Home=(props)=>{
                     <div className=" mx-auto max-w-[1050px] grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-x-5 gap-y-5">
                         {filteredProduct.map((product)=>(
                             <div key={product.id} >
-                                <CardItem product={product}/>
+                                <CardItem product={product} />
                             </div>
                         ))}
                     </div>
                 :
                 (
-                    <div>No Products</div>
+                    <div className="flex justify-between items-center">No Products!! Try searching other Products😃</div>
                 )
             }
         </div>
