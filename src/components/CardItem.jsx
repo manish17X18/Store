@@ -20,7 +20,7 @@ const CardItem=(props)=>{
             setCart(filteredCart)
             toast.error("Removed from cart successfully")
         }
-        console.log(cart)
+        // console.log(cart)
         
         setRemove((prev)=>!prev)
         // setRemove(!remove)
