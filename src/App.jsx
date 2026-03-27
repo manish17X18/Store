@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { NavLink, Route, Routes,useSearchParams } from "react-router-dom";
 import Home from "./components/Home";
 import Cart from "./components/Cart";
+import logo from "./assets/logo.jpg"
 // import './App.css'
 import './index.css'
 import { AppContext } from './ContextApi/ContextApi';
@@ -45,14 +46,22 @@ function App() {
   return (
     <div className=' flex flex-col w-full'>
       <div className='mb-4 flex justify-center gap-x-7 w-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-pink-300 via-fuchsia-400 to-purple-500 text-slate-900 pt-3 pb-4'>
-        <NavLink to="/" >
-          <button className='h-[100%] w-[70px] p-1 transition-all duration-300 
-          hover:bg-[radial-gradient(circle,_var(--tw-gradient-stops))] 
-        from-pink-500 via-purple-600 to-indigo-800 
-        active:text-white font-semibold rounded-lg shadow-lg '>
-            Home
-          </button>
-        </NavLink>
+        <div className='w-[20%] ml-4 flex justify-between'>
+          <div>
+            <NavLink to="/">
+              <img src={logo} alt='logo' className='w-[50px] h-[50px] cursor-pointer rounded-full'/>
+            </NavLink>
+          </div>
+          
+          <NavLink to="/" >
+            <button className='h-[100%] w-[70px] p-1 transition-all duration-300 
+              hover:bg-[radial-gradient(circle,_var(--tw-gradient-stops))] 
+            from-pink-500 via-purple-600 to-indigo-800 
+            active:text-white font-semibold rounded-lg shadow-lg '>Home </button>
+          </NavLink>
+        </div>
+        
+        
         <NavLink to="/cart" className="">
           <button className='h-[100%] w-[70px] p-1 transition-all duration-300 
           hover:bg-[radial-gradient(circle,_var(--tw-gradient-stops))] 
