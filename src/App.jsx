@@ -30,21 +30,70 @@ function App() {
   //useSearchPArams
   const [searchParam,setSearchParam]=useSearchParams();
   const item=searchParam.get('item')||"";
-  const filteredProduct=products.filter((product)=>
-    product.title.toLowerCase().includes(item.toLowerCase())
-  )
+  const sort=searchParam.get('sort')||""
+  const category=searchParam.get('category')||""
+
   function changeHandler(e){
     const val=e.target.value
-    if(val){
-      setSearchParam({item:val})
-    }
-    else{
-      setSearchParam({})
-    }
+    setSearchParam((prev)=>{
+      const newSearch=new URLSearchParams(prev);
+      if(val){
+        newSearch.set('item',val)
+      }
+      else{
+        newSearch.delete('item')
+      } 
+      return newSearch;
+    }) 
   }
 
+  let filteredProduct=products.filter((product)=>{
+    const matchesSearch= product.title.toLowerCase().includes(item.toLowerCase())
+    const categoryFilter=category===""||product.category===category
+    return matchesSearch && categoryFilter
+})
+
+  function handleSort(e){
+    const val=e.target.value;
+    setSearchParam((prev)=>{
+      const newSort=new URLSearchParams(prev);
+      if(val){
+        newSort.set('sort',val)
+      }
+      else{
+        newSort.delete('sort');
+      }
+      return newSort
+    })
+  }
+
+  if(sort==='low'){
+    filteredProduct=[...filteredProduct].sort((a,b)=>a.price-b.price)
+  }
+  if(sort==='high'){
+    filteredProduct=[...filteredProduct].sort((a,b)=>b.price-a.price)
+  }
+
+  //get all categories
+  const categories=["All",...new Set(products.map((product)=>product.category))]
+  function categoryHandler(e){
+    const val=e.target.value;
+    setSearchParam((prev)=>{
+      const newCategory=new URLSearchParams(prev);
+      if(val){
+        newCategory.set('category',val)
+      }
+      else{
+        newCategory.delete('category')
+      }
+      return newCategory
+    })
+  }
+
+
+
   return (
-    <div className=' flex flex-col w-full'>
+    <div className=' flex flex-col w-full '>
       <div className='mb-4 flex justify-center gap-x-7 w-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-pink-300 via-fuchsia-400 to-purple-500 text-slate-900 pt-3 pb-4'>
         <div className='w-[20%] ml-4 flex justify-between'>
           <div>
@@ -76,6 +125,30 @@ function App() {
             outline-none bg-white/90 backdrop-blur-sm shadow-md text-gray-700 placeholder:text-gray-400
             focus:ring-2 focus:ring-purple-400 rounded-full transition-all duration-300' onChange={changeHandler}/>
           </label>
+        </div>
+        <div>
+          <div>
+              Sort by Price
+          </div>
+          <select className='' onChange={handleSort} value={sort}>
+            
+            <option value="">Default</option>
+            <option value="low">Low to High</option>
+            <option value="high">High to Low</option>
+          </select>
+        </div>
+
+        {/* sort by category */}
+        <div>
+          <select onChange={categoryHandler} value={category}>
+            {
+              categories.map((cat)=>(
+                <option key={cat.id} value={cat==="All"?"":cat}>
+                  {cat.charAt(0).toUpperCase()+cat.slice(1)}
+                </option>
+              ))
+            }
+          </select>
         </div>
       </div>
       <div className='flex-grow'>
