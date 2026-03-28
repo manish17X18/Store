@@ -1,8 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import { NavLink, Route, Routes,useSearchParams } from "react-router-dom";
+import { NavLink, Route, Routes,Navigate,useSearchParams } from "react-router-dom";
 import Home from "./components/Home";
 import Cart from "./components/Cart";
 import logo from "./assets/logo.jpg"
+import { FaUserCircle } from "react-icons/fa";
+import Login from './components/Login';
+
 // import './App.css'
 import './index.css'
 import { AppContext } from './ContextApi/ContextApi';
@@ -94,66 +97,74 @@ function App() {
 
   return (
     <div className=' flex flex-col w-full '>
-      <div className='mb-4 flex justify-center gap-x-7 w-full bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-pink-300 via-fuchsia-400 to-purple-500 text-slate-900 pt-3 pb-4'>
-        <div className='w-[20%] ml-4 flex justify-between'>
-          <div>
-            <NavLink to="/">
-              <img src={logo} alt='logo' className='w-[50px] h-[50px] cursor-pointer rounded-full'/>
-            </NavLink>
-          </div>
-          
-          <NavLink to="/" >
-            <button className='h-[100%] w-[70px] p-1 transition-all duration-300 
-              hover:bg-[radial-gradient(circle,_var(--tw-gradient-stops))] 
-            from-pink-500 via-purple-600 to-indigo-800 
-            active:text-white font-semibold rounded-lg shadow-lg '>Home </button>
-          </NavLink>
-        </div>
-        
-        
-        <NavLink to="/cart" className="">
-          <button className='h-[100%] w-[70px] p-1 transition-all duration-300 
-          hover:bg-[radial-gradient(circle,_var(--tw-gradient-stops))] 
-        from-pink-500 via-purple-600 to-indigo-800 
-        active:text-white font-semibold rounded-lg shadow-lg '>
-            Cart
-          </button>
+      <div className='w-full bg-gradient-to-r from-pink-300 via-fuchsia-400 to-purple-500 text-slate-900 shadow-md sticky top-0 z-50'>
+  <div className='max-w-[1200px] mx-auto flex items-center justify-between px-6 py-3 gap-x-4'>
+    
+    {/* 1. Left Section: Logo & Brand */}
+    <div className='flex items-center gap-x-6'>
+      <NavLink to="/">
+        <img src={logo} alt='logo' className='w-12 h-12 cursor-pointer rounded-full border-2 border-white/50 hover:scale-110 transition-transform' />
+      </NavLink>
+      
+      <div className='flex gap-x-2'>
+        <NavLink to="/" className={({isActive}) => `px-4 py-2 rounded-lg font-bold transition-all ${isActive ? 'bg-white/30 text-white' : 'hover:bg-white/20'}`}>
+          Home
         </NavLink>
-        <div className=''>
-          <label>
-            <input type='text' placeholder={`Search ${words[index]}...`} className=' w-15% h-[80%] px-2 py-2 border-none
-            outline-none bg-white/90 backdrop-blur-sm shadow-md text-gray-700 placeholder:text-gray-400
-            focus:ring-2 focus:ring-purple-400 rounded-full transition-all duration-300' onChange={changeHandler}/>
-          </label>
-        </div>
-        <div>
-          <div>
-              Sort by Price
-          </div>
-          <select className='' onChange={handleSort} value={sort}>
-            
-            <option value="">Default</option>
-            <option value="low">Low to High</option>
-            <option value="high">High to Low</option>
-          </select>
-        </div>
-
-        {/* sort by category */}
-        <div>
-          <select onChange={categoryHandler} value={category}>
-            {
-              categories.map((cat)=>(
-                <option key={cat.id} value={cat==="All"?"":cat}>
-                  {cat.charAt(0).toUpperCase()+cat.slice(1)}
-                </option>
-              ))
-            }
-          </select>
-        </div>
+        <NavLink to="/cart" className={({isActive}) => `px-4 py-2 rounded-lg font-bold transition-all ${isActive ? 'bg-white/30 text-white' : 'hover:bg-white/20'}`}>
+          Cart
+        </NavLink>
       </div>
+    </div>
+
+    {/* 2. Middle Section: Search Bar */}
+    <div className='flex-grow max-w-md mx-4'>
+      <div className='relative group'>
+        <input 
+          type='text' 
+          placeholder={`Search ${words[index]}...`} 
+          className='w-full px-5 py-2 outline-none bg-white/90 backdrop-blur-sm shadow-inner text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-purple-600 rounded-full transition-all'
+          onChange={changeHandler}
+        />
+      </div>
+    </div>
+
+    {/* 3. Right Section: Filters & User */}
+    <div className='flex items-center gap-x-4 shrink-0'>
+      {/* Price Sort */}
+      <div className='flex flex-col text-[10px] font-bold uppercase tracking-wider'>
+        <span className='ml-1 opacity-70'>Price</span>
+        <select onChange={handleSort} value={sort} className='bg-transparent border-b border-slate-900 outline-none cursor-pointer font-semibold'>
+          <option value="">Default</option>
+          <option value="low">Low-High</option>
+          <option value="high">High-Low</option>
+        </select>
+      </div>
+
+      {/* Category Sort */}
+      <div className='flex flex-col text-[10px] font-bold uppercase tracking-wider'>
+        <span className='ml-1 opacity-70'>Category</span>
+        <select onChange={categoryHandler} value={category} className='bg-transparent border-b border-slate-900 outline-none cursor-pointer font-semibold'>
+          {categories.map((cat) => (
+            <option key={cat} value={cat === "All" ? "" : cat}>
+              {typeof cat === 'string' ? cat.charAt(0).toUpperCase() + cat.slice(1) : "All"}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Login Icon */}
+      <NavLink to="/login" className='hover:scale-110 transition-transform ml-2'>
+        <FaUserCircle className='w-8 h-8 text-slate-800 hover:text-purple-800 transition-colors' />
+      </NavLink>
+    </div>
+
+  </div>
+</div>
       <div className='flex-grow'>
         <Routes>
-          <Route path="/" element={<Home filteredProduct={filteredProduct}/>}></Route>
+          <Route path='/' element={<Navigate to="/login"/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
+          <Route path="/home" element={<Home filteredProduct={filteredProduct}/>}></Route>
           <Route path="/cart" element={<Cart/>}></Route>
           <Route path="/item/:id" element={<Card/>}></Route>
         </Routes>
