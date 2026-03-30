@@ -7,24 +7,37 @@ import toast from "react-hot-toast";
 
 const CardItem=(props)=>{
     const product=props.product;
-    const {cart,setCart}=useContext(AppContext)
-    const [remove,setRemove]=useState(false)//to toggle the add or remove button
-    function cartAdder(){
-        //adding to cart
-        if(remove===false){
-            setCart((prev)=>[...prev,product]);
-            toast.success("Added to Cart")
-        }
-        else if(remove===true){ //removing from cart
-            const filteredCart=cart.filter((item)=> item.id!==product.id)
-            setCart(filteredCart)
-            toast.error("Removed from cart successfully")
-        }
-        // console.log(cart)
-        
-        setRemove((prev)=>!prev)
-        // setRemove(!remove)
-    }
+    
+    const {cart,dispatch}=useContext(AppContext);
+    const isInCart=cart.some((item)=>item.id===product.id)
+
+
+
+
+
+
+    //all this is context Api with useState
+    // {
+    //     const {cart,setCart}=useContext(AppContext)
+    //     const [remove,setRemove]=useState(false)//to toggle the add or remove button
+    //     function cartAdder(){
+    //         //adding to cart
+    //         if(remove===false){
+    //             setCart((prev)=>[...prev,product]);
+    //             toast.success("Added to Cart")
+    //         }
+    //         else if(remove===true){ //removing from cart
+    //             const filteredCart=cart.filter((item)=> item.id!==product.id)
+    //             setCart(filteredCart)
+    //             toast.error("Removed from cart successfully")
+    //         }
+    //         // console.log(cart)
+            
+    //         setRemove((prev)=>!prev)
+    //         // setRemove(!remove)
+    //     }
+
+    // }
     return (
         <div className="min-h-[90%] flex flex-col justify-center border-[2px] gap-y-2 p-4
         hover:scale-105 transition-all duration-300 ease-in hover:shadow-lg border-slate-200 gap-3  ">
@@ -40,16 +53,19 @@ const CardItem=(props)=>{
             </div>
 
             {
-                !remove?
+                !isInCart?
                     <button className="mx-auto  rounded-full h-[30px] w-[75%] flex mb-2 justify-center items-center border  hover:shadow-lg hover:scale-105
                     hover:text-slate-100 hover:bg-slate-800 transition-all duration-300 ease-in pb-1" 
-                        onClick={cartAdder}>
+                        onClick={()=>{dispatch({type:"ADD_CART",payload:product})
+                        toast.success("Added to the cart")}}
+                        >
                         Add to Cart<CiShoppingCart className="mt-[6px]"/>
                     </button>
                     :
                     <button className="mx-auto  rounded-full h-[30px] w-[85%] flex mb-2 justify-center items-center border  hover:shadow-lg hover:scale-105
                     hover:text-slate-100 hover:bg-slate-800 transition-all duration-300 ease-in pb-1" 
-                        onClick={cartAdder}>
+                        onClick={()=>{dispatch({type:"DELETE_CART",payload:product.id})
+                        toast.error("Removed from cart")}}>
                         Remove from Cart<CiShoppingCart className="mt-[6px]"/>
                     </button>
             }

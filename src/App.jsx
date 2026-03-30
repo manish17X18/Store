@@ -107,7 +107,7 @@ function App() {
       </NavLink>
       
       <div className='flex gap-x-2'>
-        <NavLink to="/" className={({isActive}) => `px-4 py-2 rounded-lg font-bold transition-all ${isActive ? 'bg-white/30 text-white' : 'hover:bg-white/20'}`}>
+        <NavLink to="/home" className={({isActive}) => `px-4 py-2 rounded-lg font-bold transition-all ${isActive ? 'bg-white/30 text-white' : 'hover:bg-white/20'}`}>
           Home
         </NavLink>
         <NavLink to="/cart" className={({isActive}) => `px-4 py-2 rounded-lg font-bold transition-all ${isActive ? 'bg-white/30 text-white' : 'hover:bg-white/20'}`}>

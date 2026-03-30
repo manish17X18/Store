@@ -8,17 +8,22 @@ import { AppContext } from "../ContextApi/ContextApi";
 const CartElement=(props)=>{
     const product=props.item
 
-    const {cart,setCart}=useContext(AppContext)
+    // const {cart,setCart}=useContext(AppContext)
+
+    //reducer
+    const {cart,dispatch}=useContext(AppContext);
+
+
     // const [remove,setRemove]=useState(false)//to toggle the add or remove button
-    function cartRemover(){
-        //remove from cart
-        const productToBeRemoved=cart.find((item)=>item.id===product.id)
-        if(productToBeRemoved){
-            const filteredCart=cart.filter((item)=>item.id!==product.id);
-            setCart(filteredCart)
-            toast.error("Removed from Cart")
-        }
-    }
+    // function cartRemover(){
+    //     //remove from cart
+    //     const productToBeRemoved=cart.find((item)=>item.id===product.id)
+    //     if(productToBeRemoved){
+    //         const filteredCart=cart.filter((item)=>item.id!==product.id);
+    //         setCart(filteredCart)
+    //         toast.error("Removed from Cart")
+    //     }
+    // }
 
     return(
         <div className="min-h-[90%] flex flex-col justify-center border-[2px] gap-y-2 p-4
@@ -37,7 +42,7 @@ const CartElement=(props)=>{
 
             <button className="mx-auto  rounded-full h-[30px] w-[85%] flex mb-2 justify-center items-center border  hover:shadow-lg hover:scale-105
                 hover:text-slate-100 hover:bg-slate-800 transition-all duration-300 ease-in pb-1" 
-                onClick={cartRemover}>
+                onClick={()=>dispatch({type:"DELETE_CART",payload:product.id})}>
                     Remove from Cart<CiShoppingCart className="mt-[6px]"/>
             </button>
             
